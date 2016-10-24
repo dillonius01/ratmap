@@ -1,0 +1,24 @@
+17:22] <dillonius> Hey! I'm having some issues building a query in soda-js
+[17:23] <dillonius> anyone know details on the syntax for specifying something like 'where <parameter> is not null' or 'where <parameter> gte <some number>'?
+[17:25] <@chrismetcalf> dillonius: Lemme take a look
+[17:26] <@chrismetcalf> Pretty sure you can just do `.where({“$where”: “field_name IS NOT NULL”})`
+[17:30] <dillonius> hmm I am still getting an error, but have no problem with like a regular '.where({field_name: someval})'
+[17:31] <@chrismetcalf> What error are you getting with “$where”?
+[17:31] <@chrismetcalf> ah, maybe try `.query(“WHERE field_name IS NOT NULL”)`
+[17:32] <dillonius> ah okay, will that still work if I chain other conditions like .limit(), etc?
+[17:33] <@chrismetcalf> Looking into that, I don’t have as much experience with `soda-js` as other libraries
+[17:34] <dillonius> ah okay, that is working now, thanks!
+[17:34] <@chrismetcalf> And you’re getting the right results?
+[17:34] <@chrismetcalf> I think it might be `.soql` not `.query`
+[17:35] <dillonius> well no more error at least
+[17:35] <@chrismetcalf> `.soql` overrides the other query options
+[17:35] <@chrismetcalf> So you have to pass it a full query string
+[17:36] <@chrismetcalf> https://github.com/socrata/soda-js/blob/master/src/soda-js.coffee#L219
+[17:37] <@chrismetcalf> Looking at that, I think the `“$where” : “field_name IS NOT NULL”` should work. Whats the error you’re getting?
+[17:38] <dillonius> the request wasn't even sending, got a jquery error
+[17:39] <dillonius> but the stack trace wasn't very helpful tbh
+[17:39] <@chrismetcalf> Ah
+[17:40] <@chrismetcalf> You can just write a full SoQL query (https://dev.socrata.com/docs/queries/query.html) and use the `.soql` call, which should bypass all that
+[17:40] <@chrismetcalf> `.soql(“SELECT col1, col2 WHERE col1 IS NOT NULL LIMIT 5 OFFSET 5”)`
+[17:41] <dillonius> haha okay. doesn't that almost defeat the point of the abstraction though?
+[17:41] <@chrismetcalf> Yeah more than a little :) But not seeing the error I’m not quite sure what’s doing wrong with `.where`

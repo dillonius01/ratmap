@@ -1,0 +1,41 @@
+{
+  "name": "ratmap",
+  "version": "1.0.0",
+  "description": "Map of rat inspections in NYC",
+  "main": "app.js",
+  "scripts": {
+    "test": "test",
+    "start:production": "node app.js",
+    "start:dev": "nodemon app.js",
+    "start": "npm run start:dev",
+    "build-css": "node-sass -w -r assets/stylesheets -o public/stylesheets"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dillonius01/ratmap.git"
+  },
+  "keywords": [
+    "socrata",
+    "opendatanyc",
+    "rats",
+    "public_sector"
+  ],
+  "author": "dillonius01",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dillonius01/ratmap/issues"
+  },
+  "homepage": "https://github.com/dillonius01/ratmap#readme",
+  "dependencies": {
+    "bluebird": "^3.4.6",
+    "body-parser": "^1.15.2",
+    "bower": "^1.7.9",
+    "express": "^4.14.0",
+    "morgan": "^1.7.0",
+    "node-sass": "^3.10.1",
+    "nodemon": "^1.11.0",
+    "nunjucks": "^2.5.2",
+    "path": "^0.12.7",
+    "soda-js": "^0.2.2"
+  }
+}

@@ -7,6 +7,8 @@ $(document).ready(function() {
 
 	$('#all-rats').click(() => fetchAllRats(map))
 
+	$('#reset').click(clearMap)
+
 })
 
 

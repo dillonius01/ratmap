@@ -16,7 +16,7 @@ router.get('/allrats', function(req, res, next) {
 	console.log('hit allrats route');
 	consumer.query()
 		.withDataset(RATS)
-		.soql('SELECT * WHERE location IS NOT NULL LIMIT 1000')
+		.soql('SELECT * WHERE location IS NOT NULL AND result IS NOT NULL LIMIT 5000')
 		.getRows()
 			.on('success', rows => res.send(rows))
 			.on('error', next)

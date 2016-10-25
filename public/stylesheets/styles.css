@@ -3,9 +3,16 @@ map-container {
   width: 95%; }
 
 map {
-  height: 95%;
-  width: 95%;
+  height: 92vh;
+  width: 99vw;
   position: fixed !important; }
 
 nav button {
   margin-top: 7.5px; }
+
+nav img {
+  display: none;
+  margin-top: 7.5px; }
+
+#menunav {
+  margin-bottom: 0; }

@@ -3,6 +3,7 @@
 <html lang="en">
   <head>
     <title>{% block title %}RatMap{% endblock %}</title>
+    <link href="/images/favicon.ico" rel="icon">
     <link href="stylesheets/styles.css" rel="stylesheet">
     <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCM3a92FKH4ItIyu2RyN0h-FDO-dpQ_rDc"></script>
@@ -13,11 +14,13 @@
   </head>
 
   <body>    
-    <nav class="navbar navbar-inverse">
+    <nav id="menunav" class="navbar navbar-inverse">
       <div class="container-fluid">
         <div class="navbar-header">
           <a class="navbar-brand" href="#">RatMap</a>
           <button id="all-rats" class="btn btn-secondary">All rats!</button>
+          <button id="reset" class="btn btn-warning">Reset</button>
+          <img id="fetching" src="/images/rolling.svg">
         </div>
       </div>
     </nav>

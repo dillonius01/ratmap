@@ -4,8 +4,8 @@ map-container {
 }
 
 map {
-	height: 95%;
-	width: 95%;
+	height: 92vh;
+	width: 99vw;
   position: fixed !important;
 }
 
@@ -15,5 +15,14 @@ nav {
     margin-top: 7.5px;
   }
 
+  img {
+  	display: none;
+  	margin-top: 7.5px;
+  }
 
+
+}
+
+#menunav {
+  margin-bottom: 0;
 }

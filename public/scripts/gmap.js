@@ -1,25 +1,25 @@
-function initialize_gmaps() {
-    // initialize new google maps LatLng object
-    var mapCenter = new google.maps.LatLng(40.7484405,-73.9878531);
-    // set the map options hash
-    var mapOptions = {
+function drawMap() {
+    let mapCenter = new google.maps.LatLng(40.7484405,-73.9878531);
+    let mapOptions = {
         center: mapCenter,
-        zoom: 13,
+        zoom: 12,
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
-    // get the maps div's HTML obj
-    var map_canvas_obj = document.getElementById("map-canvas");
-    // initialize a new Google Map with the options
-    var map = new google.maps.Map(map_canvas_obj, mapOptions);
-    // Add the marker to the map
-    var marker = new google.maps.Marker({
-        position: mapCenter,
-        title:"Hello World!"
-    });
-    // Add the marker to the map by calling setMap()
-    marker.setMap(map);
+
+    let map_canvas_obj = document.getElementById("map-canvas");
+    return new google.maps.Map(map_canvas_obj, mapOptions);
 }
 
-$(document).ready(function() {
-    initialize_gmaps();
-});
+
+function drawMarker(map, inspection) {
+    let lng = +inspection.longitude;
+    let lat = +inspection.latitude;
+    let markerLocation = new google.maps.LatLng(lat, lng);
+
+    let newMarker = new google.maps.Marker({
+        position: markerLocation,
+        title: inspection.street_name
+    })
+
+    newMarker.setMap(map)
+}

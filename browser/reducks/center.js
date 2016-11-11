@@ -1,7 +1,7 @@
 /* -----------------    ACTIONS     ------------------ */
 
 const SET_CENTER = 'SET_CENTER';
-
+const SET_BY_SEARCH = 'SET_BY_SEARCH';
 
 
 /* ------------   ACTION CREATORS     ------------------ */
@@ -26,7 +26,7 @@ export const setCenter = br => {
       latLng.lat = 40.8458;
       latLng.lng = -73.8747;
       break;
-    case 'StatenIsland':
+    case 'Staten Island':
       latLng.lat = 40.589;
       latLng.lng = -74.1425;
       break;
@@ -42,12 +42,23 @@ export const setCenter = br => {
 };
 
 
+export const setBySearch = latLng => ({
+  type: SET_BY_SEARCH,
+  latLng
+})
+
+
+
+
 /* ------------       REDUCER     ------------------ */
 
 export const centerReducer = (previousState = {lat: 40.7484405, lng: -73.9878531}, action) => {
   
   switch (action.type) {
     case SET_CENTER:
+      return action.latLng;
+
+    case SET_BY_SEARCH:
       return action.latLng;
 
     default:

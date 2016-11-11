@@ -13,7 +13,7 @@ ReactDOM.render(
 	<Provider store={store}>
 	  <Router history={hashHistory}>
 	    <Route path="/" component={ Root }>
-	      <IndexRoute component={GMap} />
+	    	<IndexRoute component={ GMap } />
 	    </Route>
 	  </Router>
 	</Provider>

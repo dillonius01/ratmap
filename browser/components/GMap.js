@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { InfoWindow, Map, GoogleApiWrapper, Marker } from 'google-maps-react';
 
 import { GMAPI } from '../apiKeys';
@@ -8,40 +8,52 @@ import { connect } from 'react-redux';
 
 /* -----------------    COMPONENT     ------------------ */
 
-const Container = React.createClass({
- getInitialState: function() {
-  return {
+class Container extends Component {
+ constructor(props) {
+  super(props)
+  this.state = {
     showingInfoWindow: false,
     activeMarker: {},
     selectedPlace: {}
-  };
- },
+  }
+  this.onMarkerClick = this.onMarkerClick.bind(this);
+  this.onInfoWindowClose = this.onInfoWindowClose.bind(this);
+  this.setState = this.setState.bind(this);
+ }
 
-  onMarkerClick: function(props, marker, e) {
+ componentDidUpdate(prevProps, prevState) {
+  if (this.props.center !== prevProps.center) {
+    this.setState({
+      currentLocation: this.props.center
+    })
+  }
+ }
+
+  onMarkerClick(props, marker, e) {
     this.setState({
       selectedPlace: props,
       activeMarker: marker,
       showingInfoWindow: true
     });
-  },
+  }
 
-  onInfoWindowClose: function() {
+  onInfoWindowClose() {
     this.setState({
       showingInfoWindow: false,
       activeMarker: null
     });
-  },
+  }
 
-  onMapClicked: function(props) {
+  onMapClicked(props) {
     if (this.state.showingInfoWindow) {
       this.setState({
         showingInfoWindow: false,
         activeMarker: null
       });
     }
-  },
+  }
 
-  render: function() {
+  render() {
     if (!this.props.loaded) {
       return <div>Loading...</div>
     }
@@ -56,19 +68,19 @@ const Container = React.createClass({
           }}
           styles={styles}
           className={'map'}
-          zoom={12}
+          zoom={this.props.zoom || 11}
           initialCenter={{
             lat: 40.7484405,
             lng: -73.9878531
           }}
+          center={this.props.center}
           containerStyle={{}}
           onClick={this.onMapClicked}
           onDragend={this.onMapMoved}>
 
 
         {
-          this.props.markers && this.props.markers.length ? 
-            this.props.markers.map((marker, index) => (
+          this.props.markers && this.props.markers.map((marker, index) => (
               <Marker
                 icon={iconURLs[marker.result]}
                 position={{lat: +marker.latitude, lng: +marker.longitude}}
@@ -78,14 +90,11 @@ const Container = React.createClass({
                 wd={{
                   house_number: marker.house_number || '',
                   street_name: marker.street_name,
-                  inspection_date: marker.inspection_date.slice(0, 10)
+                  inspection_date: marker.inspection_date.slice(0, 10),
+                  result: marker.result
                 }}
               />
             ))
-            :
-          <Marker
-            icon="/public/images/gray-sm.png"
-          />
         }
 
         <InfoWindow
@@ -104,7 +113,7 @@ const Container = React.createClass({
       </Map>
     );
   }
-});
+}
 
 /*
 
@@ -112,22 +121,11 @@ const Container = React.createClass({
           centerAroundCurrentLocation={true}
 
 
-  <div>
-      <h4>{inspection.house_number || ''} {inspection.street_name}</h4>
-      <p>Status: ${inspection.result}</p>
-      <p>Inspection Date: {inspection.inspection_date.slice(0, 10)}</p>
-    </div>
-
-
-
-
-
-
 */
 
 /* -----------------    CONTAINER     ------------------ */
 
-const mapState = ({ markers }) => ({ markers });
+const mapState = ({ markers, center, zoom }) => ({ markers, center, zoom });
 // const mapDispatch = dispatch => ({})
 
 

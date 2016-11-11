@@ -14,6 +14,10 @@ export const addMarkers = markers => ({
   markers
 });
 
+export const clearMarkers = () => ({
+  type: CLEAR_MARKERS
+})
+
 
 /* ------------       REDUCER     ------------------ */
 
@@ -21,7 +25,7 @@ export const markersReducer = (previousState = [], action) => {
   
   switch (action.type) {
     case ADD_MARKERS:
-      return [...previousState, ...action.markers];
+      return [...action.markers];
 
     case CLEAR_MARKERS:
       return [];
@@ -44,6 +48,16 @@ export const fetchNonPassing = () => {
       .catch(err => console.error(err))
   };
 };
+
+export const fetchBorough = borough => {
+  return dispatch => {
+    axios.get(`/api/borough/${borough}`)
+      .then(inspections => {
+        console.log(`got inspections for ${borough}!`, inspections.data.length)
+        dispatch(addMarkers(inspections.data))
+      })
+  }
+}
 
 export const fetchAllRats = () => {
   return dispatch => {

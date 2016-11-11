@@ -1,41 +1,38 @@
 {
   "name": "ratmap",
-  "version": "1.0.0",
-  "description": "Map of rat inspections in NYC",
-  "main": "app.js",
+  "version": "1.1.0",
+  "description": "",
+  "main": "webpack.config.js",
   "scripts": {
-    "test": "test",
-    "start:production": "node app.js",
-    "start:dev": "nodemon app.js",
-    "start": "npm run start:dev",
-    "build-css": "node-sass -w -r assets/stylesheets -o public/stylesheets"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack -w & nodemon server.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/dillonius01/ratmap.git"
-  },
-  "keywords": [
-    "socrata",
-    "opendatanyc",
-    "rats",
-    "public_sector"
-  ],
-  "author": "dillonius01",
+  "keywords": [],
+  "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/dillonius01/ratmap/issues"
-  },
-  "homepage": "https://github.com/dillonius01/ratmap#readme",
   "dependencies": {
+    "axios": "^0.15.2",
+    "babel": "^6.5.2",
+    "babel-core": "^6.17.0",
+    "babel-loader": "^6.2.5",
+    "babel-preset-es2015": "^6.16.0",
+    "babel-preset-react": "^6.16.0",
     "bluebird": "^3.4.6",
     "body-parser": "^1.15.2",
-    "bower": "^1.7.9",
     "express": "^4.14.0",
-    "morgan": "^1.7.0",
-    "node-sass": "^3.10.1",
+    "google-maps-react": "^1.0.19",
     "nodemon": "^1.11.0",
-    "nunjucks": "^2.5.2",
-    "path": "^0.12.7",
-    "soda-js": "^0.2.2"
+    "react": "^15.3.2",
+    "react-bootstrap": "^0.30.6",
+    "react-dom": "^15.3.2",
+    "react-redux": "^4.4.5",
+    "react-router": "^2.8.1",
+    "react-router-bootstrap": "^0.23.1",
+    "redux": "^3.6.0",
+    "redux-logger": "^2.7.4",
+    "redux-thunk": "^2.1.0",
+    "soda-js": "^0.2.2",
+    "volleyball": "^1.3.0",
+    "webpack": "^1.13.2"
   }
 }

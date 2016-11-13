@@ -6,22 +6,10 @@ const SET_ZOOM = 'SET_ZOOM';
 
 /* ------------   ACTION CREATORS     ------------------ */
 
-export const setZoom = location => {
-  let zoom;
-
-  switch (location) {
-    case 'NYC':
-      zoom = 11;
-      break;
-    default:
-      zoom = 12;
-  }
-
-  return {
-    type: SET_ZOOM,
-    zoom
-  };
-};
+export const setZoom = zoom => ({
+  type: SET_ZOOM,
+  zoom
+});
 
 
 /* ------------       REDUCER     ------------------ */

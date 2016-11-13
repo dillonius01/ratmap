@@ -1,33 +1,40 @@
 import React, { Component } from 'react';
 import { InfoWindow, Map, GoogleApiWrapper, Marker } from 'google-maps-react';
 
+
 import { GMAPI } from '../apiKeys';
 import { styles, iconURLs } from '../utils';
 import { connect } from 'react-redux';
 
+import { setGoogle } from '../reducks/google';
 
 /* -----------------    COMPONENT     ------------------ */
 
 class Container extends Component {
- constructor(props) {
-  super(props)
-  this.state = {
-    showingInfoWindow: false,
-    activeMarker: {},
-    selectedPlace: {}
+  constructor(props) {
+    super(props);
+    this.state = {
+      showingInfoWindow: false,
+      activeMarker: {},
+      selectedPlace: {}
+    };
+    this.onMarkerClick = this.onMarkerClick.bind(this);
+    this.onInfoWindowClose = this.onInfoWindowClose.bind(this);
+    this.setState = this.setState.bind(this);
   }
-  this.onMarkerClick = this.onMarkerClick.bind(this);
-  this.onInfoWindowClose = this.onInfoWindowClose.bind(this);
-  this.setState = this.setState.bind(this);
- }
 
- componentDidUpdate(prevProps, prevState) {
-  if (this.props.center !== prevProps.center) {
-    this.setState({
-      currentLocation: this.props.center
-    })
+  componentDidUpdate(prevProps, prevState) {
+    const { google, initGoogle } = this.props;
+    if (this.props.center !== prevProps.center) {
+      this.setState({
+        currentLocation: this.props.center
+      });
+    }
+
+    if (google && google !== prevProps.google) {
+      initGoogle(google);
+    }
   }
- }
 
   onMarkerClick(props, marker, e) {
     this.setState({
@@ -58,9 +65,11 @@ class Container extends Component {
       return <div>Loading...</div>
     }
 
+    const { google, zoom, center, markers, place } = this.props;
+
     return (
       <Map
-          google={this.props.google}
+          google={ google }
           style={{
           	width: '100vw',
           	height: '93vh',
@@ -68,19 +77,19 @@ class Container extends Component {
           }}
           styles={styles}
           className={'map'}
-          zoom={this.props.zoom || 11}
+          zoom={ zoom }
           initialCenter={{
             lat: 40.7484405,
             lng: -73.9878531
           }}
-          center={this.props.center}
+          center={ center }
           containerStyle={{}}
           onClick={this.onMapClicked}
           onDragend={this.onMapMoved}>
 
 
         {
-          this.props.markers && this.props.markers.map((marker, index) => (
+          markers && markers.map((marker, index) => (
               <Marker
                 icon={iconURLs[marker.result]}
                 position={{lat: +marker.latitude, lng: +marker.longitude}}
@@ -96,6 +105,14 @@ class Container extends Component {
               />
             ))
         }
+        
+        <Marker
+          position={{
+            lat: place.geometry && place.geometry.location.lat(),
+            lng: place.geometry && place.geometry.location.lng()
+          }}
+        />
+
 
         <InfoWindow
           marker={this.state.activeMarker}
@@ -109,14 +126,13 @@ class Container extends Component {
               </p>
             </div>
         </InfoWindow>
-
       </Map>
     );
   }
 }
 
 /*
-
+        google.maps.places.Autocomplete / SearchBox / AutocompleteService
 
           centerAroundCurrentLocation={true}
 
@@ -125,13 +141,15 @@ class Container extends Component {
 
 /* -----------------    CONTAINER     ------------------ */
 
-const mapState = ({ markers, center, zoom }) => ({ markers, center, zoom });
-// const mapDispatch = dispatch => ({})
+const mapState = ({ markers, center, zoom, place }) => ({ markers, center, zoom, place });
+const mapDispatch = dispatch => ({
+  initGoogle: google => dispatch(setGoogle(google))
+})
 
 
 const Wrapped = GoogleApiWrapper({
   apiKey: GMAPI
 })(Container);
 
-export default connect(mapState, null)(Wrapped);
+export default connect(mapState, mapDispatch)(Wrapped);
 

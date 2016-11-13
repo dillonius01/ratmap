@@ -33,56 +33,12 @@ router.get('/nonpassing', function(req, res, next) {
 
 });
 
-
-// NOTE: these are not DRY but could not use string interpolation in the SOQL query
-router.get('/borough/Manhattan', function(req, res, next) {
-	console.log('hit Manhattan route');
+router.get('/borough/:borough', function(req, res, next) {
+	console.log('hit boroughhhh route');
+	const queryString = String.raw`SELECT * WHERE location IS NOT NULL AND borough = "${req.params.borough}" AND result != "Passed Inspection" LIMIT 2000`
 	consumer.query()
 		.withDataset(RATS)
-		.soql('SELECT * WHERE location IS NOT NULL AND borough = "Manhattan" AND result != "Passed Inspection" LIMIT 2000')
-		.getRows()
-			.on('success', rows => res.send(rows))
-			.on('error', next)
-
-});
-
-router.get('/borough/Brooklyn', function(req, res, next) {
-	console.log('hit Brooklyn route');
-	consumer.query()
-		.withDataset(RATS)
-		.soql('SELECT * WHERE location IS NOT NULL AND borough = "Brooklyn" AND result != "Passed Inspection" LIMIT 2000')
-		.getRows()
-			.on('success', rows => res.send(rows))
-			.on('error', next)
-
-});
-
-router.get('/borough/Queens', function(req, res, next) {
-	console.log('hit Brooklyn route');
-	consumer.query()
-		.withDataset(RATS)
-		.soql('SELECT * WHERE location IS NOT NULL AND borough = "Queens" AND result != "Passed Inspection" LIMIT 2000')
-		.getRows()
-			.on('success', rows => res.send(rows))
-			.on('error', next)
-});
-
-router.get('/borough/Bronx', function(req, res, next) {
-	console.log('hit Brooklyn route');
-	consumer.query()
-		.withDataset(RATS)
-		.soql('SELECT * WHERE location IS NOT NULL AND borough = "Bronx" AND result != "Passed Inspection" LIMIT 2000')
-		.getRows()
-			.on('success', rows => res.send(rows))
-			.on('error', next)
-
-});
-
-router.get('/borough/StatenIsland', function(req, res, next) {
-	console.log('hit Staten Island route');
-	consumer.query()
-		.withDataset(RATS)
-		.soql('SELECT * WHERE location IS NOT NULL AND borough = "Staten Island" AND result != "Passed Inspection" LIMIT 2000')
+		.soql(queryString)
 		.getRows()
 			.on('success', rows => res.send(rows))
 			.on('error', next)

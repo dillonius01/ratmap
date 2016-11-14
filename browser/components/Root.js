@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Navbar, Nav, MenuItem, NavDropdown, NavItem, FormGroup, FormControl, Button } from 'react-bootstrap';
+
 import { fetchNonPassing, clearMarkers, fetchBorough, fetchWithinDistance } from '../reducks/markers';
 import { setCenter, setBySearch } from '../reducks/center';
 import { setZoom } from '../reducks/zoom';
 import { setPlace, clearPlace } from '../reducks/place';
-import { connect } from 'react-redux';
+import { fetchScore } from '../reducks/score';
+
+
 
 
 /* -----------------    COMPONENT     ------------------ */
@@ -28,11 +32,13 @@ class Root extends React.Component {
 
 	byPoint(evt) {
 		evt.preventDefault();
-		const { place } = this.props;
+		const { place, bypoint, getscore } = this.props;
+		if (!place) return;
 		const lat = place.geometry.location.lat();
 		const lng = place.geometry.location.lng();
 		const brgh = place.vicinity;
-		this.props.bypoint(lat, lng, brgh);
+		bypoint(lat, lng, brgh);
+		getscore(lat, lng, brgh);
 	}
 
 	showAll(evt) {
@@ -109,7 +115,7 @@ class Root extends React.Component {
                   <FormGroup>
                     <input ref={ node => this.autocomplete = node } type="text" placeholder="Search" id="search" />
                   </FormGroup>
-                  <Button className="btn-warning" onClick={ this.byPoint } >Find Nearby</Button>
+                  <Button className="btn-warning" onClick={ this.byPoint }>Find Nearby</Button>
                 </Navbar.Form>
 				      </Nav>
 
@@ -132,7 +138,7 @@ class Root extends React.Component {
 
 /* -----------------    CONTAINER     ------------------ */
 
-const mapState = ({ google, place }) => ({ google, place });
+const mapState = ({ google, place, score }) => ({ google, place, score });
 
 const mapDispatch = dispatch => ({
 	infest: () => dispatch(fetchNonPassing()),
@@ -143,8 +149,17 @@ const mapDispatch = dispatch => ({
 	setzoom: zoom => dispatch(setZoom(zoom)),
 	onquery: latlng => dispatch(setBySearch(latlng)),
 	setplace: place => dispatch(setPlace(place)),
-	bypoint: (lat, lng, brgh) => dispatch(fetchWithinDistance(lat, lng, brgh))
+	bypoint: (lat, lng, brgh) => dispatch(fetchWithinDistance(lat, lng, brgh)),
+	getscore: (lat, lng, brgh) => dispatch(fetchScore(lat, lng, brgh))
 });
 
 export default connect(mapState, mapDispatch)(Root);
+
+
+				      // <Nav>
+          //       <NavDropdown title="Choose Location">
+	         //        <MenuItem onClick={ this.byPoint } >Visualize</MenuItem>
+          //         <MenuItem onClick={ this.getScore } >Get Score</MenuItem>
+          //       </NavDropdown>
+				      // </Nav>
 

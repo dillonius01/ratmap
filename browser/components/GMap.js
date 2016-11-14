@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { InfoWindow, Map, GoogleApiWrapper, Marker } from 'google-maps-react';
-
+import Loader from 'react-loader';
 
 import { GMAPI } from '../apiKeys';
 import { styles, iconURLs, sanitizePopup } from '../utils';
 import { connect } from 'react-redux';
 
 import { setGoogle } from '../reducks/google';
+import { endLoading } from '../reducks/loading';
 
 /* -----------------    COMPONENT     ------------------ */
 
@@ -24,7 +25,7 @@ class Container extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { google, initGoogle } = this.props;
+    const { google, initGoogle, hidespinner } = this.props;
     if (this.props.center !== prevProps.center) {
       this.setState({
         currentLocation: this.props.center
@@ -34,6 +35,15 @@ class Container extends Component {
     if (google && google !== prevProps.google) {
       initGoogle(google);
     }
+
+    if (prevProps.markers !== this.props.markers) {
+      hidespinner();
+    }
+
+    // need to test below line
+    if (prevProps.place !== this.props.place) {
+      hidespinner();
+    }
   }
 
   onMarkerClick(props, marker, e) {
@@ -42,7 +52,6 @@ class Container extends Component {
       activeMarker: marker,
       showingInfoWindow: true
     });
-    console.log('clicked a marker!', marker)
   }
 
   onInfoWindowClose() {
@@ -52,18 +61,10 @@ class Container extends Component {
     });
   }
 
-  onMapClicked(props) {
-    if (this.state.showingInfoWindow) {
-      this.setState({
-        showingInfoWindow: false,
-        activeMarker: null
-      });
-    }
-  }
 
   render() {
     if (!this.props.loaded) {
-      return <div>Loading...</div>
+      return <Loader />;
     }
 
     const { google, zoom, center, markers, place, score } = this.props;
@@ -155,7 +156,8 @@ class Container extends Component {
 
 const mapState = ({ markers, center, zoom, place, score }) => ({ markers, center, zoom, place, score });
 const mapDispatch = dispatch => ({
-  initGoogle: google => dispatch(setGoogle(google))
+  initGoogle: google => dispatch(setGoogle(google)),
+  hidespinner: () => dispatch(endLoading())
 })
 
 

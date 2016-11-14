@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Navbar, Nav, MenuItem, NavDropdown, NavItem, FormGroup, FormControl, Button } from 'react-bootstrap';
-import { fetchNonPassing, clearMarkers, fetchBorough } from '../reducks/markers';
+import { fetchNonPassing, clearMarkers, fetchBorough, fetchWithinDistance } from '../reducks/markers';
 import { setCenter, setBySearch } from '../reducks/center';
 import { setZoom } from '../reducks/zoom';
 import { setPlace, clearPlace } from '../reducks/place';
@@ -15,6 +15,7 @@ class Root extends React.Component {
 		this.byBorough = this.byBorough.bind(this);
 		this.showAll = this.showAll.bind(this);
 		this.clearAll = this.clearAll.bind(this);
+		this.byPoint = this.byPoint.bind(this);
 	}
 
 	byBorough(evt) {
@@ -23,6 +24,15 @@ class Root extends React.Component {
 		this.props.borough(brgh);
 		this.props.recenter(brgh);
 		this.props.setzoom(12);
+	}
+
+	byPoint(evt) {
+		evt.preventDefault();
+		const { place } = this.props;
+		const lat = place.geometry.location.lat();
+		const lng = place.geometry.location.lng();
+		const brgh = place.vicinity;
+		this.props.bypoint(lat, lng, brgh);
 	}
 
 	showAll(evt) {
@@ -69,14 +79,13 @@ class Root extends React.Component {
       onquery(latlng);
       setzoom(16);
       setplace(place);
+      this.setState({ hasPlace: true })
     });
 
 
 	}
 
 	render() {
-		const { clear } = this.props;
-		const props = this.props;
 		return (
 			<div>
 				<Navbar inverse collapseOnSelect>
@@ -98,9 +107,9 @@ class Root extends React.Component {
 				      <Nav>
 				        <Navbar.Form>
                   <FormGroup>
-                    <input ref={ node => this.autocomplete = node } type="text" placeholder="Search" />
+                    <input ref={ node => this.autocomplete = node } type="text" placeholder="Search" id="search" />
                   </FormGroup>
-                  <Button type="submit">Find Rats</Button>
+                  <Button className="btn-warning" onClick={ this.byPoint } >Find Nearby</Button>
                 </Navbar.Form>
 				      </Nav>
 
@@ -123,7 +132,7 @@ class Root extends React.Component {
 
 /* -----------------    CONTAINER     ------------------ */
 
-const mapState = ({ google }) => ({ google });
+const mapState = ({ google, place }) => ({ google, place });
 
 const mapDispatch = dispatch => ({
 	infest: () => dispatch(fetchNonPassing()),
@@ -133,7 +142,8 @@ const mapDispatch = dispatch => ({
 	recenter: br => dispatch(setCenter(br)),
 	setzoom: zoom => dispatch(setZoom(zoom)),
 	onquery: latlng => dispatch(setBySearch(latlng)),
-	setplace: place => dispatch(setPlace(place))
+	setplace: place => dispatch(setPlace(place)),
+	bypoint: (lat, lng, brgh) => dispatch(fetchWithinDistance(lat, lng, brgh))
 });
 
 export default connect(mapState, mapDispatch)(Root);

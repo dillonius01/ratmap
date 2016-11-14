@@ -1,3 +1,4 @@
+
 /* -----------------    ACTIONS     ------------------ */
 
 const SET_PLACE = 'SET_PLACE';

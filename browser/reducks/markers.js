@@ -59,6 +59,19 @@ export const fetchBorough = borough => {
   }
 }
 
+export const fetchWithinDistance = (lat, lng, brgh) => {
+  return dispatch => {
+    axios.get(`/api/distance/${lat}/${lng}/${brgh}`)
+      .then(inspections => {
+        console.log('got within a certain distance from the point!', inspections.data.length);
+        dispatch(addMarkers(inspections.data));
+      })
+      .catch(err => console.error(err));
+  }
+}
+
+
+
 export const fetchAllRats = () => {
   return dispatch => {
     axios.get(`/api/allrats`)

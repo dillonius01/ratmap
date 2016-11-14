@@ -3,7 +3,7 @@ import { InfoWindow, Map, GoogleApiWrapper, Marker } from 'google-maps-react';
 
 
 import { GMAPI } from '../apiKeys';
-import { styles, iconURLs } from '../utils';
+import { styles, iconURLs, sanitizePopup } from '../utils';
 import { connect } from 'react-redux';
 
 import { setGoogle } from '../reducks/google';
@@ -97,7 +97,7 @@ class Container extends Component {
                 name={marker.job_id}
                 key={index}
                 wd={{
-                  house_number: marker.house_number || '',
+                  house_number: sanitizePopup(marker.house_number),
                   street_name: marker.street_name,
                   inspection_date: marker.inspection_date.slice(0, 10),
                   result: marker.result
@@ -111,6 +111,7 @@ class Container extends Component {
             lat: place.geometry && place.geometry.location.lat(),
             lng: place.geometry && place.geometry.location.lng()
           }}
+          icon={iconURLs.place}
         />
 
 
@@ -132,10 +133,7 @@ class Container extends Component {
 }
 
 /*
-        google.maps.places.Autocomplete / SearchBox / AutocompleteService
-
           centerAroundCurrentLocation={true}
-
 
 */
 

@@ -8,13 +8,10 @@ export const iconURLs = {
   'Passed Inspection': '/public/images/green-sm.png',
   'Bait applied': '/public/images/yellow-sm.png',
   'Monitoring visit': '/public/images/gray-sm.png',
-  'Cleanup done': '/public/images/pink-sm.png'
+  'Cleanup done': '/public/images/pink-sm.png',
+  'place': '/public/images/cheese.png'
 };
 
-export const createInfoBox = inspection => (
-  <div>
-      <h4>{inspection.house_number || ''} {inspection.street_name}</h4>
-      <p>Status: ${inspection.result}</p>
-      <p>Inspection Date: {inspection.inspection_date.slice(0, 10)}</p>
-    </div>
- );
+export const sanitizePopup = field => {
+	return (field === 'null') ? '' : field;
+}

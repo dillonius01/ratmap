@@ -50,7 +50,6 @@ router.get('/distance/:lat/:lng/:brgh', function(req, res, next) {
 
 
 router.get('/score/:lat/:lng/:brgh', function(req, res, next) {
-	console.log('hit crazy math distance route');
 	const borough = utils.sanitizeBorough(req.params.brgh);
 	const lat1 = req.params.lat;
 	const lon1 = req.params.lng;
@@ -66,11 +65,10 @@ router.get('/score/:lat/:lng/:brgh', function(req, res, next) {
 		.then(filtered => {
 			const passing = filtered.filter(row => {
 				return row.result === 'Passed Inspection';
-			})
+			});
 			return passing.length / filtered.length;
 		})
 		.then(score => {
-			console.log('score is', score);
 			res.send({ score })
 	})
 		.catch(next)

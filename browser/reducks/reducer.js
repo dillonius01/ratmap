@@ -5,6 +5,7 @@ import { zoomReducer } from './zoom';
 import { googleReducer } from './google';
 import { placeReducer } from './place';
 import { scoreReducer } from './score';
+import { loadingReducer } from './loading';
 
 const rootReducer = combineReducers({
 	markers: markersReducer,
@@ -12,7 +13,8 @@ const rootReducer = combineReducers({
 	zoom: zoomReducer,
 	google: googleReducer,
 	place: placeReducer,
-	score: scoreReducer
+	score: scoreReducer,
+	loading: loadingReducer
 });
 
 export default rootReducer;

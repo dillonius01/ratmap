@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Navbar, Nav, MenuItem, NavDropdown, NavItem, FormGroup, FormControl, Button } from 'react-bootstrap';
+import Loader from 'react-loader';
 
 import { fetchNonPassing, clearMarkers, fetchBorough, fetchWithinDistance } from '../reducks/markers';
 import { setCenter, setBySearch } from '../reducks/center';
 import { setZoom } from '../reducks/zoom';
 import { setPlace, clearPlace } from '../reducks/place';
 import { fetchScore } from '../reducks/score';
-
-
+import { startLoading } from '../reducks/loading';
 
 
 /* -----------------    COMPONENT     ------------------ */
@@ -25,33 +25,39 @@ class Root extends React.Component {
 	byBorough(evt) {
 		evt.preventDefault();
 		const brgh = evt.target.name;
-		this.props.borough(brgh);
-		this.props.recenter(brgh);
-		this.props.setzoom(12);
+		const { borough, recenter, setzoom, startspinner } = this.props;
+		startspinner();
+		borough(brgh);
+		recenter(brgh);
+		setzoom(12);
 	}
 
 	byPoint(evt) {
 		evt.preventDefault();
-		const { place, bypoint, getscore } = this.props;
+		const { place, bypoint, getscore, startspinner } = this.props;
 		if (!place) return;
 		const lat = place.geometry.location.lat();
 		const lng = place.geometry.location.lng();
 		const brgh = place.vicinity;
+		startspinner();
 		bypoint(lat, lng, brgh);
 		getscore(lat, lng, brgh);
 	}
 
 	showAll(evt) {
 		evt.preventDefault();
-		this.props.infest();
-		this.props.recenter('NYC');
-		this.props.setzoom(11);
+		const { infest, recenter, setzoom, startspinner } = this.props;
+		startspinner();
+		infest();
+		recenter('NYC');
+		setzoom(11);
 	}
 
 	clearAll(evt) {
 		evt.preventDefault();
-		this.props.clear();
-		this.props.clearplace();
+		const { clear, clearplace } = this.props;
+		clear();
+		clearplace();
 	}
 
 	componentDidMount() {
@@ -67,7 +73,7 @@ class Root extends React.Component {
 	}
 
 	renderAutoComplete() {
-    const { google, onquery, setzoom, setplace } = this.props;
+    const { google, onquery, setzoom, setplace, startspinner } = this.props;
     if (!google) return;
 
     const node = this.autocomplete;
@@ -82,10 +88,11 @@ class Root extends React.Component {
         lng: place.geometry.location.lng()
       };
 
+      startspinner();
       onquery(latlng);
       setzoom(16);
       setplace(place);
-      this.setState({ hasPlace: true })
+      this.setState({ hasPlace: true });
     });
 
 
@@ -125,7 +132,9 @@ class Root extends React.Component {
 				      </Nav>
 				    </Navbar.Collapse>
 				  </Navbar>
-
+				  <Loader
+				  	loaded={!this.props.loading}
+				  />
 					{
 						this.props.children
 					}
@@ -138,7 +147,7 @@ class Root extends React.Component {
 
 /* -----------------    CONTAINER     ------------------ */
 
-const mapState = ({ google, place, score }) => ({ google, place, score });
+const mapState = ({ google, place, score, loading }) => ({ google, place, score, loading });
 
 const mapDispatch = dispatch => ({
 	infest: () => dispatch(fetchNonPassing()),
@@ -150,7 +159,8 @@ const mapDispatch = dispatch => ({
 	onquery: latlng => dispatch(setBySearch(latlng)),
 	setplace: place => dispatch(setPlace(place)),
 	bypoint: (lat, lng, brgh) => dispatch(fetchWithinDistance(lat, lng, brgh)),
-	getscore: (lat, lng, brgh) => dispatch(fetchScore(lat, lng, brgh))
+	getscore: (lat, lng, brgh) => dispatch(fetchScore(lat, lng, brgh)),
+	startspinner: () => dispatch(startLoading())
 });
 
 export default connect(mapState, mapDispatch)(Root);

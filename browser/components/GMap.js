@@ -42,6 +42,7 @@ class Container extends Component {
       activeMarker: marker,
       showingInfoWindow: true
     });
+    console.log('clicked a marker!', marker)
   }
 
   onInfoWindowClose() {
@@ -65,7 +66,7 @@ class Container extends Component {
       return <div>Loading...</div>
     }
 
-    const { google, zoom, center, markers, place } = this.props;
+    const { google, zoom, center, markers, place, score } = this.props;
 
     return (
       <Map
@@ -112,6 +113,7 @@ class Container extends Component {
             lng: place.geometry && place.geometry.location.lng()
           }}
           icon={iconURLs.place}
+          onClick={this.onMarkerClick}
         />
 
 
@@ -119,14 +121,26 @@ class Container extends Component {
           marker={this.state.activeMarker}
           visible={this.state.showingInfoWindow}
           onClose={this.onInfoWindowClose}>
-            <div>
-              <h4>{this.state.selectedPlace.wd && this.state.selectedPlace.wd.house_number} {this.state.selectedPlace.wd && this.state.selectedPlace.wd.street_name}</h4>
-              <p>
-                Status: {this.state.selectedPlace.wd && this.state.selectedPlace.wd.result}<br></br>
-                Inspection Date: {this.state.selectedPlace.wd && this.state.selectedPlace.wd.inspection_date}
-              </p>
-            </div>
+            {
+              this.state.selectedPlace.wd ?
+                <div>
+                  <h4>{this.state.selectedPlace.wd.house_number} {this.state.selectedPlace.wd.street_name}</h4>
+                  <p>
+                    Status: {this.state.selectedPlace.wd.result}<br></br>
+                    Inspection Date: {this.state.selectedPlace.wd.inspection_date}
+                  </p>
+                </div>
+              :
+                <div>
+                  <h4>{ place.name }</h4>
+                  <h5>Pass rate: { Math.round(100 * score) }%</h5>
+                </div>
+
+            }
+
+
         </InfoWindow>
+
       </Map>
     );
   }
@@ -139,7 +153,7 @@ class Container extends Component {
 
 /* -----------------    CONTAINER     ------------------ */
 
-const mapState = ({ markers, center, zoom, place }) => ({ markers, center, zoom, place });
+const mapState = ({ markers, center, zoom, place, score }) => ({ markers, center, zoom, place, score });
 const mapDispatch = dispatch => ({
   initGoogle: google => dispatch(setGoogle(google))
 })

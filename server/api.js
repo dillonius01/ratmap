@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const utils = require('./serverUtils');
+const utils = require('./utils');
 
 
 // constants for calculating data of however many years

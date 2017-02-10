@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { InfoWindow, Map, GoogleApiWrapper, Marker } from 'google-maps-react';
 import Loader from 'react-loader';
 
+import { GMAP_API_KEY } from '../apiKeys';
+
 import { styles, iconURLs, sanitizePopup } from '../utils';
 import { connect } from 'react-redux';
 
@@ -160,10 +162,9 @@ const mapDispatch = dispatch => ({
   hidespinner: () => dispatch(endLoading())
 })
 
-const apiKey = GOOGLE_RATMAP_API_KEY;
 
 const Wrapped = GoogleApiWrapper({
-  apiKey
+  apiKey: GMAP_API_KEY
 })(Container);
 
 export default connect(mapState, mapDispatch)(Wrapped);

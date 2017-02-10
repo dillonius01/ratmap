@@ -9,11 +9,6 @@ module.exports = {
     path: __dirname,
     filename: './public/bundle.js'
   },
-  plugins: [
-    new webpack.DefinePlugin({
-      GOOGLE_RATMAP_API_KEY: `${process.env.GOOGLE_RATMAP_API_KEY}`
-    })
-  ],
   context: __dirname,
   devtool: 'source-map',
   module: {

@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { InfoWindow, Map, GoogleApiWrapper, Marker } from 'google-maps-react';
 import Loader from 'react-loader';
 
-import { GMAPI } from '../apiKeys';
 import { styles, iconURLs, sanitizePopup } from '../utils';
 import { connect } from 'react-redux';
 
 import { setGoogle } from '../reducks/google';
 import { endLoading } from '../reducks/loading';
+
 
 /* -----------------    COMPONENT     ------------------ */
 
@@ -162,7 +162,7 @@ const mapDispatch = dispatch => ({
 
 
 const Wrapped = GoogleApiWrapper({
-  apiKey: GMAPI
+  apiKey: GOOGLE_RATMAP_API_KEY
 })(Container);
 
 export default connect(mapState, mapDispatch)(Wrapped);

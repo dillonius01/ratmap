@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Navbar, Nav, MenuItem, NavDropdown, NavItem, FormGroup, FormControl, Button } from 'react-bootstrap';
 import Loader from 'react-loader';
+import { Link } from 'react-router';
 
 import { fetchNonPassing, clearMarkers, fetchBorough, fetchWithinDistance } from '../reducks/markers';
 import { setCenter, setBySearch } from '../reducks/center';
@@ -103,7 +104,11 @@ class Root extends React.Component {
 			<div>
 				<Navbar inverse collapseOnSelect>
 				    <Navbar.Header>
-				      <Navbar.Brand>RatMap</Navbar.Brand>
+				      <Navbar.Brand>
+				      	<Link to="/">
+					      	<img id="nav-icon" src="/public/images/icon-rat.png"/>RatMap
+				      	</Link>
+				    	</Navbar.Brand>
 				      <Navbar.Toggle />
 				    </Navbar.Header>
 				    <Navbar.Collapse id="nav-collapse">

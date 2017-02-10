@@ -41,7 +41,7 @@ class Container extends Component {
     }
 
     // need to test below line
-    if (prevProps.place !== this.props.place) {
+    if (prevProps.place != this.props.place) {
       hidespinner();
     }
   }

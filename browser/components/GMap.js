@@ -160,9 +160,10 @@ const mapDispatch = dispatch => ({
   hidespinner: () => dispatch(endLoading())
 })
 
+const apiKey = GOOGLE_RATMAP_API_KEY;
 
 const Wrapped = GoogleApiWrapper({
-  apiKey: GOOGLE_RATMAP_API_KEY
+  apiKey
 })(Container);
 
 export default connect(mapState, mapDispatch)(Wrapped);

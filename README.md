@@ -2,6 +2,7 @@
 
 ## About
 This is a hackathon project whose prototype I built over the course of about four days. I've done a bit of maintenance since then, too.
+Currently the site is deployed via <a href="http://ratmap.herokuapp.com">ratmap.herokuapp.com</a>
 
 ## Technologies
 #### Front-End
